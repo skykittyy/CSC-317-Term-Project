@@ -1,0 +1,32 @@
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    margin: 0;
+    padding: 2em;
+    background-color: #fff;
+}
+
+h1 {
+    font-size: 2.5em;
+    margin-bottom: 1em;
+}
+
+.service-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2em;
+    flex-wrap: wrap;
+}
+
+.service-icon {
+    width: 200px;
+    height: auto;
+    border-radius: 50%;
+}
+
+.service-text {
+    font-size: 1.2em;
+    color: #333;
+    text-align: left;
+}
