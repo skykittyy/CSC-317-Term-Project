@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Thank You - Plushie Store</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #fdf9f9;
+      color: #333;
+      padding-bottom: 80px;
+    }
+
+    a {
+      text-decoration: none;
+      color: #555;
+      transition: color 0.3s ease;
+    }
+
+    a:hover {
+      color: #ff6f91;
+    }
+
+    nav {
+      background: #fff;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    }
+
+    .logo {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #ff6f91;
+    }
+
+    .links a {
+      margin-left: 1.5rem;
+      font-weight: 500;
+    }
+
+    .cart-icon {
+      font-size: 1.5rem;
+      color: #ff6f91;
+      position: relative;
+      cursor: pointer;
+    }
+
+    .cart-count {
+      position: absolute;
+      top: -6px;
+      right: -10px;
+      background: #e55d80;
+      color: white;
+      border-radius: 50%;
+      padding: 2px 6px;
+      font-size: 0.75rem;
+      font-weight: bold;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .cart-count.visible {
+      opacity: 1;
+    }
+
+    main {
+      max-width: 900px;
+      margin: 2rem auto;
+      padding: 0 1.5rem;
+    }
+
+    h1 {
+      font-size: 2.2rem;
+      color: #d6336c;
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    #order-summary {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+
+    #order-summary h2 {
+      color: #d6336c;
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
+
+    .item {
+      display: flex;
+      align-items: center;
+      border-bottom: 1px solid #f0f0f0;
+      padding: 1rem 0;
+    }
+
+    .item:last-child {
+      border-bottom: none;
+    }
+
+    .item img {
+      width: 80px;
+      height: 80px;
+      object-fit: cover;
+      border-radius: 8px;
+      margin-right: 1rem;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    .item-details {
+      flex-grow: 1;
+    }
+
+    .item-details h3 {
+      margin-bottom: 0.3rem;
+      color: #d6336c;
+    }
+
+    .item-details p {
+      font-size: 0.9rem;
+      color: #555;
+    }
+
+    .item-price {
+      font-weight: bold;
+      color: #ff6f91;
+      min-width: 90px;
+      text-align: right;
+      font-size: 1.1rem;
+    }
+
+    .totals {
+      margin-top: 1.5rem;
+      font-weight: 600;
+      font-size: 1.1rem;
+      color: #d6336c;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+    }
+
+    .totals > div {
+      margin-bottom: 0.4rem;
+    }
+
+    .total-amount {
+      font-size: 1.3rem;
+      font-weight: 700;
+    }
+
+    footer {
+      text-align: center;
+      padding: 2rem 1rem;
+      background: #fff;
+      border-top: 1px solid #eee;
+      color: #999;
+      margin-top: 4rem;
+    }
+
+    @media (max-width: 480px) {
+      nav {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .links a {
+        margin: 0.5rem 0;
+      }
+
+      .item {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .item-price {
+        text-align: left;
+        margin-top: 0.5rem;
+        min-width: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="logo">🧸 Plushie Store</div>
+    <div class="links">
+      <a href="/cart" class="cart-icon" aria-label="View Cart">🛒
+        <span id="cart-count" class="cart-count">0</span>
+      </a>
+      <a href="/">Home</a>
+      <a href="/products">Products</a>
+      <a href="/faq">FAQ</a>
+      <a href="/about">About</a>
+    </div>
+  </nav>
+
+  <main>
+    <h1>Thank You for Your Order!</h1>
+    <section id="order-summary" aria-live="polite" aria-atomic="true">
+      <p style="text-align:center; color:#999;">Loading your order details...</p>
+    </section>
+  </main>
+
+  <footer>&copy; 2025 Plushie Store — Cuddle responsibly!</footer>
+
+  <script>
+    const cartCountSpan = document.getElementById('cart-count');
+    const orderSummary = document.getElementById('order-summary');
+
+    async function updateCartCount() {
+      try {
+        const res = await fetch('/api/cart');
+        if (!res.ok) throw new Error('Failed to fetch cart');
+        const data = await res.json();
+        const quantity = data.reduce((sum, item) => sum + item.quantity, 0);
+        cartCountSpan.textContent = quantity;
+        if (quantity > 0) {
+          cartCountSpan.classList.add('visible');
+        } else {
+          cartCountSpan.classList.remove('visible');
+        }
+      } catch {
+        cartCountSpan.classList.remove('visible');
+      }
+    }
+
+    async function renderCartAsOrder() {
+      try {
+        const res = await fetch('/api/cart');
+        if (!res.ok) throw new Error('Failed to fetch cart');
+        const cartItems = await res.json();
+
+        if (cartItems.length === 0) {
+          orderSummary.innerHTML = '<p style="text-align:center; color:#e55d80;">Your cart is empty.</p>';
+          return;
+        }
+
+        let subtotal = 0;
+        let html = `<h2>Here are the items you checked out:</h2>`;
+
+        cartItems.forEach(item => {
+          const itemTotal = item.price * item.quantity;
+          subtotal += itemTotal;
+
+          html += `
+            <div class="item">
+              <img src="${item.image || 'https://via.placeholder.com/80?text=No+Image'}" alt="${item.name}" />
+              <div class="item-details">
+                <h3>${item.name}</h3>
+                <p>${item.description || ''}</p>
+                <p>Quantity: ${item.quantity}</p>
+              </div>
+              <div class="item-price">$${itemTotal.toFixed(2)}</div>
+            </div>
+          `;
+        });
+
+        const shipping = 5.00;
+        const taxes = subtotal * 0.08;
+        const total = subtotal + shipping + taxes;
+
+        html += `
+          <div class="totals">
+            <div>Subtotal: $${subtotal.toFixed(2)}</div>
+            <div>Shipping: $${shipping.toFixed(2)}</div>
+            <div>Taxes (8%): $${taxes.toFixed(2)}</div>
+            <div class="total-amount">Total Paid: $${total.toFixed(2)}</div>
+          </div>
+        `;
+
+        orderSummary.innerHTML = html;
+
+        // ✅ Clear the cart after rendering the order
+        await fetch('/api/cart/clear', {
+          method: 'POST'
+        });
+
+        updateCartCount();
+
+      } catch (err) {
+        console.error(err);
+        orderSummary.innerHTML = '<p style="text-align:center; color:#e55d80;">Failed to load order details.</p>';
+      }
+    }
+
+    updateCartCount();
+    renderCartAsOrder();
+  </script>
+
+</body>
+</html>

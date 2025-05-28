@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>🧸 Plushie Store - Cart</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #fdf9f9;
+      color: #333;
+      padding-bottom: 100px;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    a {
+      color: #555;
+      text-decoration: none;
+      transition: color 0.3s ease;
+      display: block;
+    }
+    a:hover { color: #ff6f91; }
+    nav {
+      background: #fff;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      position: static;
+      z-index: 1000;
+    }
+    .logo {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #ff6f91;
+    }
+    .links a {
+      margin-left: 1.5rem;
+      font-weight: 500;
+      display: inline;
+      position: relative;
+    }
+    .cart-icon {
+      font-size: 1.5rem;
+      color: #ff6f91;
+      margin-right: 1.5rem;
+      position: relative;
+      cursor: pointer;
+    }
+    .cart-count {
+      position: absolute;
+      top: -6px;
+      right: -10px;
+      background: #e55d80;
+      color: white;
+      border-radius: 50%;
+      padding: 2px 6px;
+      font-size: 0.75rem;
+      font-weight: bold;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      pointer-events: none;
+      user-select: none;
+    }
+    .cart-count.visible { opacity: 1; }
+    .cart-count.pulse {
+      animation: pulse 0.4s ease-in-out;
+    }
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.4); }
+      100% { transform: scale(1); }
+    }
+
+    main, header {
+      padding: 2rem;
+      max-width: 900px;
+      margin: 0 auto;
+      width: 100%;
+    }
+    header {
+      text-align: center;
+      margin-bottom: 2rem;
+      color: #d6336c;
+    }
+    header h1 {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+    }
+    header p {
+      font-size: 1.2rem;
+      color: #666;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      overflow: hidden;
+    }
+    thead {
+      background: #ff6f91;
+      color: white;
+      font-weight: 600;
+    }
+    thead th:first-child { text-align: center; }
+    th, td {
+      padding: 1rem 1.25rem;
+      text-align: left;
+      border-bottom: 1px solid #eee;
+      vertical-align: middle;
+    }
+    tbody tr:hover { background: #fff0f3; }
+    .product-info {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .product-info img {
+      width: 60px;
+      height: 60px;
+      object-fit: contain;
+      border-radius: 8px;
+      background: #fff5f9;
+    }
+    .product-name {
+      font-weight: 600;
+      color: #d6336c;
+    }
+    .quantity-input {
+      width: 60px;
+      padding: 0.3rem 0.5rem;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      text-align: center;
+      font-size: 1rem;
+      transition: border-color 0.3s ease;
+    }
+    .quantity-input:focus {
+      border-color: #ff6f91;
+      outline: none;
+    }
+    .remove-btn {
+      background: transparent;
+      border: none;
+      color: #ff6f91;
+      font-weight: 700;
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: color 0.3s ease;
+    }
+    .remove-btn:hover { color: #e55d80; }
+    td[data-label="Remove"] { text-align: center; }
+
+    .summary {
+      margin-top: 2rem;
+      width: 100%;
+      text-align: right;
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #28a745;
+    }
+    .checkout-btn {
+      display: inline-block;
+      margin: 1rem auto 3rem auto;
+      background: #ff6f91;
+      color: white;
+      padding: 0.75rem 1.75rem;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 1.1rem;
+      cursor: pointer;
+      border: none;
+      box-shadow: 0 4px 8px rgb(255 111 145 / 0.4);
+      transition: background 0.3s ease, box-shadow 0.3s ease;
+      width: 100%;
+      max-width: 900px;
+    }
+    .checkout-btn:hover {
+      background: #e55d80;
+      box-shadow: 0 6px 12px rgb(229 93 128 / 0.6);
+    }
+
+    @media (max-width: 700px) {
+      table, thead, tbody, th, td, tr { display: block; }
+      thead tr { display: none; }
+      tbody tr {
+        margin-bottom: 1.5rem;
+        background: white;
+        padding: 1rem;
+        border-radius: 10px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      }
+      tbody td {
+        text-align: right;
+        position: relative;
+        padding-left: 50%;
+        padding: 0.5rem 0;
+      }
+      tbody td::before {
+        content: attr(data-label);
+        position: absolute;
+        left: 1rem;
+        width: 45%;
+        padding-left: 0.5rem;
+        font-weight: 600;
+        text-align: left;
+        color: #d6336c;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="logo">🧸 Plushie Store</div>
+    <div class="links">
+      <a href="/cart" class="cart-icon" aria-label="View Cart">🛒<span id="cart-count" class="cart-count">0</span></a>
+      <a href="/">Home</a>
+      <a href="/products">Products</a>
+      <a href="/faq">FAQ</a>
+      <a href="/about">About Us</a>
+      <a href="/login">Login/Register</a>
+    </div>
+  </nav>
+
+  <header>
+    <h1>Your Cart 🛒</h1>
+    <p>Review your plushies before checkout!</p>
+  </header>
+
+  <table aria-label="Shopping cart items">
+    <thead>
+      <tr>
+        <th>Product</th>
+        <th>Price</th>
+        <th>Quantity</th>
+        <th>Subtotal</th>
+        <th>Remove</th>
+      </tr>
+    </thead>
+    <tbody id="cart-items">
+      <!-- Cart items will be dynamically inserted here -->
+    </tbody>
+  </table>
+
+  <div class="summary" id="cart-summary">Total: $0.00</div>
+  <button class="checkout-btn" id="checkout-btn">Proceed to Checkout</button>
+
+  <script>
+    let cartItems = [];
+
+    const cartItemsContainer = document.getElementById('cart-items');
+    const cartSummary = document.getElementById('cart-summary');
+    const checkoutBtn = document.getElementById('checkout-btn');
+    const cartCountSpan = document.getElementById('cart-count');
+
+    function updateCartCount(count) {
+      cartCountSpan.textContent = count;
+      if (count > 0) {
+        cartCountSpan.classList.add('visible');
+        cartCountSpan.classList.remove('pulse');
+        void cartCountSpan.offsetWidth;
+        cartCountSpan.classList.add('pulse');
+      } else {
+        cartCountSpan.classList.remove('visible');
+      }
+    }
+
+    async function fetchCart() {
+      try {
+        const res = await fetch('/api/cart');
+        if (!res.ok) throw new Error('Failed to fetch cart');
+        cartItems = await res.json();
+        renderCart();
+        const totalQuantity = cartItems.reduce((acc, i) => acc + i.quantity, 0);
+        updateCartCount(totalQuantity);
+      } catch (err) {
+        console.error(err);
+        cartItemsContainer.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:2rem; color:#999;">Failed to load cart items.</td></tr>';
+        cartSummary.textContent = 'Total: $0.00';
+        updateCartCount(0);
+      }
+    }
+
+    function renderCart() {
+      if (cartItems.length === 0) {
+        cartItemsContainer.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:2rem; color:#999;">Your cart is empty.</td></tr>';
+        cartSummary.textContent = 'Total: $0.00';
+        return;
+      }
+
+      cartItemsContainer.innerHTML = cartItems.map(item => `
+        <tr>
+          <td data-label="Product">
+            <div class="product-info">
+              <img src="${item.image}" alt="${item.name}" />
+              <div class="product-name">${item.name}</div>
+            </div>
+          </td>
+          <td data-label="Price">$${item.price.toFixed(2)}</td>
+          <td data-label="Quantity">
+            <input type="number" min="1" value="${item.quantity}" class="quantity-input" data-id="${item.id}" />
+          </td>
+          <td data-label="Subtotal">$${(item.price * item.quantity).toFixed(2)}</td>
+          <td data-label="Remove">
+            <button class="remove-btn" data-id="${item.id}">&times;</button>
+          </td>
+        </tr>
+      `).join('');
+
+      updateTotal();
+      addListeners();
+    }
+
+    function updateTotal() {
+      const total = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
+      cartSummary.textContent = `Total: $${total.toFixed(2)}`;
+    }
+
+    function addListeners() {
+      document.querySelectorAll('.quantity-input').forEach(input => {
+        input.addEventListener('change', async e => {
+          const id = e.target.getAttribute('data-id');
+          let quantity = Number(e.target.value);
+          if (quantity < 1) quantity = 1;
+          e.target.value = quantity;
+
+          try {
+            const res = await fetch('/api/cart/update', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ productId: id, quantity }),
+            });
+            if (!res.ok) throw new Error('Failed to update quantity');
+            await fetchCart();
+          } catch (err) {
+            alert('Could not update quantity. Please try again.');
+            console.error(err);
+          }
+        });
+      });
+
+      document.querySelectorAll('.remove-btn').forEach(button => {
+        button.addEventListener('click', async e => {
+          const id = e.target.getAttribute('data-id');
+          if (!confirm('Are you sure you want to remove this item?')) return;
+
+          try {
+            const res = await fetch('/api/cart/remove', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ productId: id }),
+            });
+            if (!res.ok) throw new Error('Failed to remove item');
+            await fetchCart();
+          } catch (err) {
+            alert('Could not remove item. Please try again.');
+            console.error(err);
+          }
+        });
+      });
+    }
+
+    // ✅ Proceed to Checkout — updated to navigate to /checkout
+    checkoutBtn.addEventListener('click', () => {
+      window.location.href = '/checkout';
+    });
+
+    fetchCart();
+  </script>
+</body>
+</html>

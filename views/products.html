@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Our Plush Products - Plushie Store</title>
+  <style>
+    /* General Styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #fdf9f9;
+      color: #333;
+      padding-bottom: 100px;
+    }
+
+    a {
+      text-decoration: none;
+      color: #555;
+      transition: color 0.3s ease;
+      display: block;
+    }
+
+    a:hover {
+      color: #ff6f91;
+    }
+
+    nav {
+      background: #fff;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+    }
+
+    .logo {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #ff6f91;
+    }
+
+    .links a {
+      margin-left: 1.5rem;
+      font-weight: 500;
+      display: inline;
+      position: relative;
+    }
+
+    .cart-icon {
+      font-size: 1.5rem;
+      color: #ff6f91;
+      transition: color 0.3s ease;
+      display: inline-block;
+      margin-left: 0;
+      margin-right: 1.5rem;
+      vertical-align: middle;
+      position: relative;
+      cursor: pointer;
+    }
+
+    .cart-icon:hover {
+      color: #e55d80;
+    }
+
+    .cart-count {
+      position: absolute;
+      top: -6px;
+      right: -10px;
+      background: #e55d80;
+      color: white;
+      border-radius: 50%;
+      padding: 2px 6px;
+      font-size: 0.75rem;
+      font-weight: bold;
+      pointer-events: none;
+      user-select: none;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .cart-count.visible {
+      opacity: 1;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.4); opacity: 0.8; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    .pulse {
+      animation: pulse 0.6s ease forwards;
+    }
+
+    h1 {
+      text-align: center;
+      padding: 4rem 2rem 2rem;
+      font-size: 2.5rem;
+      color: #d6336c;
+      margin-top: 80px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 2rem;
+      padding: 2rem;
+    }
+
+    .card {
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      position: relative;
+    }
+
+    .card a.product-link {
+      color: inherit;
+      text-decoration: none;
+      cursor: pointer;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .card a.product-link:hover {
+      color: #ff6f91;
+    }
+
+    .card img {
+      width: 100%;
+      height: 220px;
+      object-fit: contain;
+      border-radius: 0 0 10px 10px;
+      margin-bottom: 1rem;
+      pointer-events: auto;
+      flex-shrink: 0;
+    }
+
+    .card h2 {
+      font-size: 1.2rem;
+      color: #d6336c;
+      margin-bottom: 0.5rem;
+      flex-grow: 1;
+    }
+
+    .price {
+      color: #28a745;
+      font-weight: bold;
+      font-size: 1.1rem;
+      margin-bottom: 1rem;
+    }
+
+    .add-to-cart-btn {
+      background: #ff6f91;
+      border: none;
+      color: white;
+      padding: 0.75rem;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      width: 100%;
+      box-shadow: 0 4px 8px rgb(255 111 145 / 0.4);
+      transition: background 0.3s ease;
+      font-size: 1rem;
+      margin-top: auto;
+    }
+
+    .add-to-cart-btn:hover {
+      background: #e55d80;
+    }
+
+    .flying-image {
+      position: fixed;
+      pointer-events: none;
+      z-index: 9999;
+      border-radius: 10px;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+      transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.8s ease;
+      will-change: transform, opacity;
+    }
+
+    footer {
+      text-align: center;
+      padding: 2rem 1rem;
+      background: #fff;
+      border-top: 1px solid #eee;
+      color: #999;
+    }
+  </style>
+</head>
+<body>
+  <nav id="navbar" role="navigation" aria-label="Main Navigation">
+    <a href="/" class="logo" aria-label="Go to homepage">🧸 Plushie Store</a>
+    <div class="links">
+      <a href="/cart" class="cart-icon" aria-label="View Cart" title="View Cart">
+        🛒
+        <span id="cart-count" class="cart-count">0</span>
+      </a>
+      <a href="/">Home</a>
+      <a href="/products">Products</a>
+      <a href="/faq">FAQ</a>
+      <a href="/about">About Us</a>
+      <a href="/login">Login/Register</a>
+    </div>
+  </nav>
+
+  <h1>Our Plush Products</h1>
+
+  <main>
+    <section id="products" class="grid">
+      <!-- Products will load here -->
+    </section>
+  </main>
+
+  <footer>&copy; 2025 Plushie Store — Cuddle responsibly!</footer>
+
+  <script>
+    const cartCountSpan = document.getElementById('cart-count');
+    const cartIcon = document.querySelector('.cart-icon');
+
+    function updateCartCount(count) {
+      cartCountSpan.textContent = count;
+      if (count > 0) {
+        cartCountSpan.classList.add('visible');
+        cartCountSpan.classList.remove('pulse');
+        void cartCountSpan.offsetWidth; // trigger reflow for animation restart
+        cartCountSpan.classList.add('pulse');
+      } else {
+        cartCountSpan.classList.remove('visible');
+      }
+    }
+
+    async function fetchCartCount() {
+      try {
+        const res = await fetch('/api/cart', { credentials: 'include' });
+        if (!res.ok) throw new Error('Failed to load cart count');
+        const data = await res.json();
+        return Array.isArray(data) ? data.reduce((acc, i) => acc + (i.quantity || 0), 0) : (data.count || 0);
+      } catch (err) {
+        console.error('Error fetching cart count:', err);
+        return 0;
+      }
+    }
+
+    async function updateCartCountUI() {
+      const count = await fetchCartCount();
+      updateCartCount(count);
+    }
+
+    async function flyToCartAnimation(imgElem) {
+      return new Promise((resolve) => {
+        const imgRect = imgElem.getBoundingClientRect();
+        const cartRect = cartIcon.getBoundingClientRect();
+
+        const flyingImage = imgElem.cloneNode(true);
+        flyingImage.classList.add('flying-image');
+
+        flyingImage.style.width = imgRect.width + 'px';
+        flyingImage.style.height = imgRect.height + 'px';
+        flyingImage.style.top = imgRect.top + 'px';
+        flyingImage.style.left = imgRect.left + 'px';
+        flyingImage.style.position = 'fixed';
+        flyingImage.style.opacity = '1';
+        flyingImage.style.transform = 'translate(0, 0) scale(1)';
+
+        document.body.appendChild(flyingImage);
+
+        // Trigger layout so transition works
+        flyingImage.getBoundingClientRect();
+
+        const imgCenterX = imgRect.left + imgRect.width / 2;
+        const imgCenterY = imgRect.top + imgRect.height / 2;
+        const cartCenterX = cartRect.left + cartRect.width / 2;
+        const cartCenterY = cartRect.top + cartRect.height / 2;
+
+        const translateX = cartCenterX - imgCenterX;
+        const translateY = cartCenterY - imgCenterY;
+
+        flyingImage.style.transform = `translate(${translateX}px, ${translateY}px) scale(0.3)`;
+        flyingImage.style.opacity = '0';
+
+        flyingImage.addEventListener('transitionend', () => {
+          flyingImage.remove();
+          resolve();
+        });
+      });
+    }
+
+    async function loadProducts() {
+      try {
+        const res = await fetch('/api/products');
+        if (!res.ok) throw new Error('Failed to load products');
+        const products = await res.json();
+        const container = document.getElementById('products');
+        container.innerHTML = '';
+
+        products.forEach(product => {
+          const card = document.createElement('div');
+          card.className = 'card';
+
+          const productLink = document.createElement('a');
+          productLink.className = 'product-link';
+          productLink.href = `/product?id=${product.id}`;
+
+          const image = document.createElement('img');
+          image.src = product.image;
+          image.alt = product.name;
+
+          const title = document.createElement('h2');
+          title.textContent = product.name;
+
+          const price = document.createElement('p');
+          price.className = 'price';
+          price.textContent = `$${product.price.toFixed(2)}`;
+
+          productLink.appendChild(image);
+          productLink.appendChild(title);
+          productLink.appendChild(price);
+
+          const addToCart = document.createElement('button');
+          addToCart.className = 'add-to-cart-btn';
+          addToCart.textContent = 'Add to Cart';
+
+          addToCart.addEventListener('click', async (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            try {
+              const res = await fetch('/api/cart/add', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ productId: product.id, quantity: 1 }),
+                credentials: 'include'
+              });
+              if (!res.ok) throw new Error('Failed to add to cart');
+              await flyToCartAnimation(image);
+              updateCartCountUI();
+            } catch (err) {
+              console.error('Error adding to cart:', err);
+              alert('Failed to add item to cart.');
+            }
+          });
+
+          card.appendChild(productLink);
+          card.appendChild(addToCart);
+          container.appendChild(card);
+        });
+      } catch (err) {
+        console.error('Error loading products:', err);
+      }
+    }
+
+    // Initialize
+    loadProducts();
+    updateCartCountUI();
+  </script>
+</body>
+</html>

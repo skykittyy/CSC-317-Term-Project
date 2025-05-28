@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Plushie Store</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 20px;
+      background: #f0f8ff;
+    }
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+    ul {
+      list-style: none;
+      padding: 0;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+    }
+    li {
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      padding: 15px;
+      width: 200px;
+      text-align: center;
+    }
+    img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 8px;
+    }
+    h2 {
+      font-size: 1.2rem;
+      margin: 10px 0 5px;
+    }
+    p.price {
+      font-weight: bold;
+      color: #0077cc;
+      margin: 5px 0;
+    }
+    p.description {
+      font-size: 0.9rem;
+      color: #555;
+    }
+    a.details-link {
+      display: inline-block;
+      margin-top: 10px;
+      text-decoration: none;
+      color: #d6336c;
+      font-weight: bold;
+    }
+    a.details-link:hover {
+      text-decoration: underline;
+      color: #ff6f91;
+    }
+  </style>
+</head>
+<body>
+  <h1>Our Plushies</h1>
+  <ul>
+    <% plushies.forEach(plushie => { %>
+      <li>
+        <h2><%= plushie.name %></h2>
+        <img src="<%= plushie.image %>" alt="<%= plushie.name %>" />
+        <p class="price">$<%= plushie.price.toFixed(2) %></p>
+        <p class="description"><%= plushie.description %></p>
+        <!-- HERE: Link to product detail page -->
+        <a href="/product?id=<%= plushie.id %>" class="details-link">View Details</a>
+      </li>
+    <% }) %>
+  </ul>
+</body>
+</html>

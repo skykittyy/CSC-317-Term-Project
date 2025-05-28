@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Register - Plushie Store</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500;700&display=swap');
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 16px;
+      font-family: 'Poppins', sans-serif;
+      background: #fff5f8;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      animation: fadeIn 0.6s ease forwards;
+      opacity: 0;
+    }
+
+    @keyframes fadeIn {
+      to {
+        opacity: 1;
+      }
+    }
+
+    .form-container {
+      background: #fff;
+      padding: 36px 28px;
+      border-radius: 16px;
+      box-shadow: 0 10px 25px rgba(255, 111, 145, 0.25);
+      width: 100%;
+      max-width: 420px;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 2rem;
+      color: #ff6f91;
+      margin-bottom: 24px;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    input {
+      padding: 14px;
+      font-size: 1rem;
+      border: 2px solid #ddd;
+      border-radius: 10px;
+      transition: border-color 0.3s ease;
+    }
+
+    input:focus {
+      border-color: #ff6f91;
+      outline: none;
+      box-shadow: 0 0 5px rgba(255, 111, 145, 0.3);
+    }
+
+    button {
+      padding: 14px;
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: white;
+      background: #ff6f91;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background: #ff4a6e;
+    }
+
+    .login-redirect {
+      margin-top: 24px;
+      font-size: 0.95rem;
+      color: #666;
+    }
+
+    .login-redirect a {
+      color: #ff6f91;
+      font-weight: 600;
+      text-decoration: none;
+      margin-left: 5px;
+      transition: color 0.3s ease;
+    }
+
+    .login-redirect a:hover {
+      color: #ff4a6e;
+      text-decoration: underline;
+    }
+
+    .link-btn {
+      display: inline-block;
+      margin-top: 16px;
+      padding: 10px 22px;
+      background: #ff6f91;
+      color: white;
+      border-radius: 10px;
+      text-decoration: none;
+      font-size: 0.95rem;
+      transition: background 0.3s;
+    }
+
+    .link-btn:hover {
+      background: #ff4a6e;
+    }
+  </style>
+</head>
+<body>
+  <div class="form-container">
+    <h1>Create Your Account</h1>
+    <form id="registerForm" autocomplete="off">
+      <input type="text" name="name" placeholder="Full Name" required />
+      <input type="email" name="email" placeholder="Email Address" required />
+      <input type="text" name="username" placeholder="Username" required />
+      <input type="password" name="password" placeholder="Password" required />
+      <button type="submit">Register</button>
+    </form>
+    
+    <p class="login-redirect">
+      Already have an account?
+      <a href="/login">Login here</a>
+    </p>
+
+    <a href="/" class="link-btn">← Back to Home</a>
+  </div>
+
+  <script>
+    const registerForm = document.getElementById('registerForm');
+
+    registerForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const formData = new FormData(registerForm);
+      const data = {
+        name: formData.get('name'),
+        email: formData.get('email'),
+        username: formData.get('username'),
+        password: formData.get('password')
+      };
+
+      try {
+        const response = await fetch('/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+
+        if (response.ok) {
+          // Redirect to success page WITH username in URL
+          window.location.href = `/registration-success?username=${encodeURIComponent(data.username)}`;
+        } else {
+          const errorData = await response.json();
+          alert('Registration failed: ' + (errorData.error || 'Unknown error'));
+        }
+      } catch (error) {
+        alert('An error occurred. Please try again.');
+        console.error(error);
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>🧸 Plushie Store - FAQ</title>
+  <style>
+    /* Reset and global */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #fff5f8;
+      color: #333;
+      padding-bottom: 100px;
+      line-height: 1.6;
+    }
+
+    a {
+      text-decoration: none;
+      color: #555;
+      transition: color 0.3s ease;
+      display: block;
+    }
+
+    a:hover {
+      color: #ff6f91;
+    }
+
+    /* Navbar */
+    nav {
+      background: #fff;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+    }
+
+    .logo {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #ff6f91;
+    }
+
+    .links a {
+      margin-left: 1.5rem;
+      font-weight: 500;
+      display: inline;
+      position: relative;
+    }
+
+    .cart-icon {
+      font-size: 1.5rem;
+      color: #ff6f91;
+      transition: color 0.3s ease;
+      display: inline-block;
+      margin-left: 0;
+      margin-right: 1.5rem;
+      vertical-align: middle;
+      position: relative;
+      cursor: pointer;
+    }
+
+    .cart-icon:hover {
+      color: #e55d80;
+    }
+
+    .cart-count {
+      position: absolute;
+      top: -6px;
+      right: -10px;
+      background: #e55d80;
+      color: white;
+      border-radius: 50%;
+      padding: 2px 6px;
+      font-size: 0.75rem;
+      font-weight: bold;
+      pointer-events: none;
+      user-select: none;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .cart-count.visible {
+      opacity: 1;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.4); opacity: 0.8; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    .pulse {
+      animation: pulse 0.6s ease forwards;
+    }
+
+    /* FAQ container styling */
+    .container {
+      background: white;
+      max-width: 760px;
+      width: 98vw;
+      padding: 50px 30px 40px 50px;
+      border-radius: 16px;
+      box-shadow: 0 8px 24px rgba(255, 111, 145, 0.2);
+      text-align: center;
+      transition: box-shadow 0.3s ease;
+      position: relative;
+      margin: 120px auto 60px auto; /* pushed below navbar */
+    }
+
+    .container:hover {
+      box-shadow: 0 12px 36px rgba(255, 111, 145, 0.3);
+    }
+
+    h1 {
+      color: #ff6f91;
+      font-weight: 700;
+      font-size: 2.2rem;
+      margin-bottom: 20px;
+      letter-spacing: 1.2px;
+      text-align: center;
+    }
+
+    dl {
+      margin-top: 10px;
+      text-align: left;
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    dt {
+      font-weight: 600;
+      margin-top: 16px;
+      color: #ff6f91;
+      font-size: 1.1rem;
+      cursor: pointer;
+      position: relative;
+      padding-left: 35px;
+      user-select: none;
+      transition: color 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    dt:hover {
+      color: #ff4a6e;
+    }
+
+    dt .icon {
+      font-size: 1.3rem;
+      transition: transform 0.3s ease, color 0.3s ease;
+      color: #ff6f91;
+      user-select: none;
+    }
+
+    dt.active .icon {
+      color: #ff4a6e;
+      transform: rotate(20deg);
+    }
+
+    dd {
+      margin-left: 0;
+      margin-top: 8px;
+      margin-bottom: 15px;
+      padding-left: 35px;
+      font-size: 1rem;
+      line-height: 1.5;
+      color: #555;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.35s ease;
+    }
+
+    dd.show {
+      max-height: 500px;
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        padding: 25px 20px;
+        margin: 120px 10px 40px 10px;
+      }
+
+      h1 {
+        font-size: 1.9rem;
+      }
+
+      dl {
+        text-align: left;
+      }
+
+      dt {
+        font-size: 1rem;
+        padding-left: 30px;
+      }
+
+      dd {
+        font-size: 0.95rem;
+        padding-left: 30px;
+      }
+
+      dt .icon {
+        font-size: 1.1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav id="navbar" role="navigation" aria-label="Main Navigation">
+    <a href="/" class="logo" aria-label="Go to homepage">🧸 Plushie Store</a>
+    <div class="links">
+      <a href="/cart" class="cart-icon" aria-label="View Cart" title="View Cart">
+        🛒
+        <span id="cart-count" class="cart-count">0</span>
+      </a>
+      <a href="/">Home</a>
+      <a href="/products">Products</a>
+      <a href="/faq">FAQ</a>
+      <a href="/about">About Us</a>
+      <a href="/login">Login/Register</a>
+    </div>
+  </nav>
+
+  <main class="container" role="main">
+    <h1>Frequently Asked Questions</h1>
+    <dl>
+      <dt tabindex="0"><span class="icon" aria-hidden="true">🧸</span> What are your plushies made of?</dt>
+      <dd>Our plushies are made from soft, safe materials that are perfect for kids and adults alike.</dd>
+
+      <dt tabindex="0"><span class="icon" aria-hidden="true">🧸</span> Where do you ship to?</dt>
+      <dd>We ship to most countries around the world. Shipping costs depend on your location.</dd>
+
+      <dt tabindex="0"><span class="icon" aria-hidden="true">🧸</span> Can I return or exchange a plushie?</dt>
+      <dd>Yes! You can return or exchange your plushie within 30 days if it’s in original condition.</dd>
+
+      <dt tabindex="0"><span class="icon" aria-hidden="true">🧸</span> How do I contact you?</dt>
+      <dd>You can email us at support@plushieparadise.com</dd>
+
+      <dt tabindex="0"><span class="icon" aria-hidden="true">🧸</span> Are the plushies washable?</dt>
+      <dd>Yes, most plushies can be gently hand-washed. Check the tag for care instructions.</dd>
+
+      <dt tabindex="0"><span class="icon" aria-hidden="true">🧸</span> Do you sell gift cards?</dt>
+      <dd>Currently, we do not offer gift cards, but stay tuned for updates!</dd>
+    </dl>
+  </main>
+
+  <script>
+    // FAQ toggle functionality
+    const questions = document.querySelectorAll('dt');
+    questions.forEach(dt => {
+      dt.addEventListener('click', () => {
+        dt.classList.toggle('active');
+        const dd = dt.nextElementSibling;
+        dd.classList.toggle('show');
+      });
+      dt.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          dt.click();
+        }
+      });
+    });
+
+    const cartCountSpan = document.getElementById('cart-count');
+
+    function updateCartCount(count) {
+      cartCountSpan.textContent = count;
+      if (count > 0) {
+        cartCountSpan.classList.add('visible');
+        cartCountSpan.classList.remove('pulse');
+        // Restart pulse animation
+        void cartCountSpan.offsetWidth;
+        cartCountSpan.classList.add('pulse');
+      } else {
+        cartCountSpan.classList.remove('visible');
+      }
+    }
+
+    // Fetch current cart items from backend API and update cart count
+    async function updateCartCountUI() {
+      try {
+        const res = await fetch('/api/cart', { credentials: 'include' });
+        if (!res.ok) throw new Error('Failed to load cart');
+        const items = await res.json();
+        // Sum quantities from cart items array
+        const count = items.reduce((acc, item) => acc + item.quantity, 0);
+        updateCartCount(count);
+      } catch (err) {
+        console.error('Error fetching cart count:', err);
+        updateCartCount(0);
+      }
+    }
+
+    // Listen for localStorage event to sync across tabs/windows
+    window.addEventListener('storage', (event) => {
+      if (event.key === 'cartUpdated') {
+        updateCartCountUI();
+      }
+    });
+
+    // Call this after cart changes to notify other tabs
+    function notifyCartChanged() {
+      updateCartCountUI();
+      localStorage.setItem('cartUpdated', Date.now());
+    }
+
+    // On page load, fetch and show cart count
+    window.addEventListener('DOMContentLoaded', () => {
+      updateCartCountUI();
+    });
+  </script>
+</body>
+</html>

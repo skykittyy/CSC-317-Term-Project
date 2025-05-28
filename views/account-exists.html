@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Email Already Registered</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500;700&display=swap');
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: #fff0f5;
+      color: #c92a2a;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      padding: 20px;
+    }
+
+    .container {
+      background: #fff;
+      padding: 60px 50px;
+      border-radius: 28px;
+      box-shadow: 0 12px 32px rgba(255, 111, 145, 0.3);
+      max-width: 560px;
+      width: 100%;
+      text-align: center;
+      border: 2px solid #ff6f91;
+    }
+
+    h1 {
+      font-size: 2.8rem;
+      margin-bottom: 24px;
+      color: #ff4a6e;
+    }
+
+    p {
+      font-size: 1.3rem;
+      margin-bottom: 36px;
+      color: #6b1a22;
+    }
+
+    a {
+      display: inline-block;
+      margin: 0 14px;
+      padding: 14px 32px;
+      background: #ff6f91;
+      color: white;
+      border-radius: 32px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1rem;
+      box-shadow: 0 6px 16px rgba(255, 111, 145, 0.4);
+      transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    a:hover {
+      background: #ff4a6e;
+      box-shadow: 0 8px 22px rgba(255, 74, 110, 0.6);
+    }
+
+    a:focus {
+      outline: 3px solid #ff4a6e;
+      outline-offset: 3px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container" role="alert" aria-live="assertive">
+    <h1>Email Already Registered 😕</h1>
+    <p>The email you entered is already linked to an existing account.</p>
+    <a href="/login" role="button" tabindex="0">Login</a>
+    <a href="/register" role="button" tabindex="0">Try Again</a>
+  </div>
+</body>
+</html>

@@ -1,0 +1,48 @@
+<nav id="navbar">
+  <div class="logo">🧸 Plushie Store</div>
+  <div class="links">
+    <a href="/cart" class="cart-icon" aria-label="View Cart" title="View Cart">
+      🛒
+      <span id="cart-count" class="cart-count">0</span>
+    </a>
+    <a href="/">Home</a>
+    <a href="/products">Products</a>
+    <a href="/faq">FAQ</a>
+    <a href="/about">About Us</a>
+    <a href="/login">Login/Register</a>
+  </div>
+</nav>
+
+<script>
+  const cartCountSpan = document.getElementById('cart-count');
+
+  function updateCartCount(count) {
+    if (!cartCountSpan) return;
+    cartCountSpan.textContent = count;
+    if (count > 0) {
+      cartCountSpan.classList.add('visible');
+    } else {
+      cartCountSpan.classList.remove('visible');
+    }
+  }
+
+  async function fetchCartCount() {
+    try {
+      const res = await fetch('/api/cart', { credentials: 'include' });
+      if (!res.ok) throw new Error('Failed to fetch cart count');
+      const data = await res.json();
+      // If your API returns total count or items, adjust here
+      return data.count ?? (data.items ? data.items.reduce((acc, i) => acc + i.quantity, 0) : 0);
+    } catch (e) {
+      console.error('Error fetching cart count:', e);
+      return 0;
+    }
+  }
+
+  async function updateCartCountUI() {
+    const count = await fetchCartCount();
+    updateCartCount(count);
+  }
+
+  window.addEventListener('DOMContentLoaded', updateCartCountUI);
+</script>

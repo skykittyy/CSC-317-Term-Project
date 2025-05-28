@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Login - Plushie Store</title>
+  <style>
+    /* (all your existing styles here, unchanged) */
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap');
+
+    /* Fade-in animation */
+    body {
+      opacity: 0;
+      animation: fadeIn 0.6s forwards;
+      margin: 0;
+      padding: 0;
+      background: #fff5f8;
+      font-family: 'Poppins', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      color: #333;
+    }
+
+    @keyframes fadeIn {
+      to {
+        opacity: 1;
+      }
+    }
+
+    .form-container {
+      background: #fff;
+      padding: 48px 36px;
+      border-radius: 20px;
+      box-shadow: 0 14px 30px rgba(255, 111, 145, 0.25);
+      width: 100%;
+      max-width: 400px;
+      box-sizing: border-box;
+      text-align: center;
+      transition: box-shadow 0.3s ease;
+    }
+
+    .form-container:hover {
+      box-shadow: 0 20px 40px rgba(255, 111, 145, 0.35);
+    }
+
+    h1 {
+      color: #ff6f91;
+      font-weight: 700;
+      margin-bottom: 28px;
+      font-size: 2.4rem;
+      letter-spacing: 1.2px;
+    }
+
+    input[type="text"],
+    input[type="password"] {
+      width: 100%;
+      padding: 14px 16px;
+      margin: 12px 0 20px;
+      border: 1.8px solid #f0cbd5;
+      border-radius: 12px;
+      font-size: 1.1rem;
+      transition: border-color 0.3s ease;
+      box-sizing: border-box;
+    }
+
+    input[type="text"]:focus,
+    input[type="password"]:focus {
+      border-color: #ff6f91;
+      outline: none;
+      box-shadow: 0 0 8px rgba(255, 111, 145, 0.5);
+    }
+
+    button {
+      width: 100%;
+      background: #ff6f91;
+      color: white;
+      border: none;
+      padding: 14px;
+      font-weight: 700;
+      border-radius: 12px;
+      cursor: pointer;
+      font-size: 1.15rem;
+      transition: background 0.3s ease, box-shadow 0.3s ease;
+      box-shadow: 0 6px 15px rgba(255, 111, 145, 0.4);
+    }
+
+    button:hover {
+      background: #ff4a6e;
+      box-shadow: 0 8px 22px rgba(255, 74, 110, 0.6);
+    }
+
+    p.register-text {
+      margin-top: 20px;
+      font-size: 1rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      color: #555;
+    }
+
+    p.register-text span {
+      font-weight: 500;
+    }
+
+    p.register-text a {
+      color: #ff6f91;
+      font-weight: 600;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    p.register-text a:hover {
+      color: #ff4a6e;
+      cursor: pointer;
+      text-decoration: underline;
+    }
+
+    a.back-home {
+      display: inline-block;
+      margin-top: 30px;
+      background: #ff6f91;
+      color: white;
+      font-weight: 600;
+      padding: 12px 32px;
+      border-radius: 16px;
+      text-decoration: none;
+      box-shadow: 0 6px 18px rgba(255, 111, 145, 0.4);
+      transition: background-color 0.3s ease, box-shadow 0.3s ease;
+      font-size: 1rem;
+    }
+
+    a.back-home:hover {
+      background: #ff4a6e;
+      box-shadow: 0 9px 24px rgba(255, 74, 110, 0.6);
+      cursor: pointer;
+    }
+
+    .success-message {
+      display: none;
+      text-align: center;
+      margin-top: 30px;
+    }
+
+    .success-message.active {
+      display: block;
+    }
+
+    .success-message .emoji {
+      font-size: 2.8rem;
+      margin-bottom: 10px;
+    }
+
+    .success-message h2 {
+      color: #ff6f91;
+      font-weight: 700;
+      margin-bottom: 8px;
+      font-size: 1.8rem;
+    }
+
+    .success-message p {
+      color: #666;
+      font-size: 1rem;
+      margin-bottom: 18px;
+    }
+
+    .success-message a {
+      display: inline-block;
+      background: #ff6f91;
+      color: white;
+      padding: 12px 28px;
+      border-radius: 14px;
+      text-decoration: none;
+      font-weight: 600;
+      box-shadow: 0 6px 15px rgba(255, 111, 145, 0.4);
+      transition: background-color 0.3s ease, box-shadow 0.3s ease;
+      font-size: 1rem;
+    }
+
+    .success-message a:hover {
+      background: #ff4a6e;
+      box-shadow: 0 8px 20px rgba(255, 74, 110, 0.6);
+    }
+
+    /* Responsive */
+    @media (max-width: 480px) {
+      .form-container {
+        padding: 36px 24px;
+        max-width: 90vw;
+      }
+
+      h1 {
+        font-size: 1.8rem;
+        margin-bottom: 22px;
+      }
+
+      input[type="text"],
+      input[type="password"] {
+        padding: 12px 14px;
+        font-size: 1rem;
+      }
+
+      button {
+        padding: 12px;
+        font-size: 1rem;
+      }
+
+      p.register-text {
+        font-size: 0.9rem;
+        gap: 6px;
+      }
+
+      a.back-home {
+        padding: 10px 24px;
+        font-size: 0.9rem;
+      }
+
+      .success-message h2 {
+        font-size: 1.4rem;
+      }
+
+      .success-message a {
+        padding: 10px 24px;
+        font-size: 0.9rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="form-container" role="main" aria-label="Login form container">
+    <form id="loginForm" action="/login" method="POST" autocomplete="off" novalidate>
+      <h1>Login</h1>
+      <input type="text" name="username" placeholder="Username" required autofocus aria-label="Username" />
+      <input type="password" name="password" placeholder="Password" required aria-label="Password" />
+      <button type="submit" aria-label="Login button">Login</button>
+      <p class="register-text">
+        <span>Don't have an account?</span>
+        <a href="/register">Register here</a>
+      </p>
+    </form>
+
+    <a href="/" class="back-home" aria-label="Back to home page">← Back to Home</a>
+
+    <div class="success-message" id="successMessage" role="alert" aria-live="polite">
+      <div class="emoji">🎉</div>
+      <h2>Welcome Back!</h2>
+      <p>Redirecting to the homepage...</p>
+      <a href="/">Skip to Homepage</a>
+    </div>
+  </div>
+
+  <script>
+    // Handle form submission via AJAX
+    const loginForm = document.getElementById('loginForm');
+    const successMessage = document.getElementById('successMessage');
+
+    loginForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const formData = new FormData(loginForm);
+      const data = {
+        username: formData.get('username'),
+        password: formData.get('password')
+      };
+
+      try {
+        const res = await fetch('/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+
+        if (res.ok) {
+          const result = await res.json();
+          if (result.success) {
+            loginForm.style.display = 'none';
+            successMessage.classList.add('active');
+            setTimeout(() => {
+              window.location.href = '/';
+            }, 1500);
+          } else {
+            alert('Login failed.');
+          }
+        } else {
+          const errText = await res.text();
+          alert('Login failed: ' + errText);
+        }
+      } catch (err) {
+        alert('Something went wrong. Please try again.');
+      }
+    });
+  </script>
+</body>
+</html>

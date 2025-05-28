@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>🧸 Plushie Store - About Us</title>
+  <style>
+    /* Reset and global */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #fff5f8;
+      color: #333;
+      padding-bottom: 100px;
+      line-height: 1.6;
+    }
+
+    a {
+      text-decoration: none;
+      color: #555;
+      transition: color 0.3s ease;
+      display: block;
+    }
+
+    a:hover {
+      color: #ff6f91;
+    }
+
+    /* Navbar */
+    nav {
+      background: #fff;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+    }
+
+    .logo {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #ff6f91;
+    }
+
+    .links a {
+      margin-left: 1.5rem;
+      font-weight: 500;
+      display: inline;
+      position: relative;
+    }
+
+    .cart-icon {
+      font-size: 1.5rem;
+      color: #ff6f91;
+      transition: color 0.3s ease;
+      display: inline-block;
+      margin-left: 0;
+      margin-right: 1.5rem;
+      vertical-align: middle;
+      position: relative;
+      cursor: pointer;
+    }
+
+    .cart-icon:hover {
+      color: #e55d80;
+    }
+
+    .cart-count {
+      position: absolute;
+      top: -6px;
+      right: -10px;
+      background: #e55d80;
+      color: white;
+      border-radius: 50%;
+      padding: 2px 6px;
+      font-size: 0.75rem;
+      font-weight: bold;
+      pointer-events: none;
+      user-select: none;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .cart-count.visible {
+      opacity: 1;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.4); opacity: 0.8; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    .pulse {
+      animation: pulse 0.6s ease forwards;
+    }
+
+    /* About Us container styling */
+    main.container {
+      background: white;
+      max-width: 760px;
+      width: 98vw;
+      padding: 50px 40px 50px 20px;
+      border-radius: 16px;
+      box-shadow: 0 8px 24px rgba(255, 111, 145, 0.2);
+      text-align: center;
+      transition: box-shadow 0.3s ease;
+      position: relative;
+      margin: 120px auto 60px auto; /* pushed below navbar */
+    }
+
+    main.container:hover {
+      box-shadow: 0 12px 36px rgba(255, 111, 145, 0.3);
+    }
+
+    h1 {
+      color: #ff6f91;
+      font-weight: 700;
+      font-size: 2.2rem;
+      margin-bottom: 20px;
+      letter-spacing: 1.2px;
+      text-align: center;
+    }
+
+    p {
+      font-size: 1.15rem;
+      line-height: 1.7;
+      margin: 18px 0;
+      color: #555;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    @media (max-width: 480px) {
+      main.container {
+        padding: 25px 20px 40px 20px;
+        margin: 120px 10px 40px 10px;
+      }
+
+      h1 {
+        font-size: 1.9rem;
+      }
+
+      p {
+        font-size: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav id="navbar" role="navigation" aria-label="Main Navigation">
+    <a href="/" class="logo" aria-label="Go to homepage">🧸 Plushie Store</a>
+    <div class="links">
+      <a href="/cart" class="cart-icon" aria-label="View Cart" title="View Cart">
+        🛒
+        <span id="cart-count" class="cart-count">0</span>
+      </a>
+      <a href="/">Home</a>
+      <a href="/products">Products</a>
+      <a href="/faq">FAQ</a>
+      <a href="/about">About Us</a>
+      <a href="/login">Login/Register</a>
+    </div>
+  </nav>
+
+  <main class="container" role="main">
+    <h1>About Us</h1>
+    <p>Welcome to the Plushie Store! We're dedicated to bringing you the softest, cutest plushies that bring joy and comfort to everyone. Our carefully curated collection ensures there’s a perfect plushie for every hug.</p>
+    <p>Whether you're looking for a gift or a new cuddly friend, we prioritize quality and happiness in every stitch. Thank you for visiting and being part of our plushie family!</p>
+  </main>
+
+  <script>
+    const cartCountSpan = document.getElementById('cart-count');
+
+    function updateCartCount(count) {
+      cartCountSpan.textContent = count;
+      if (count > 0) {
+        cartCountSpan.classList.add('visible');
+        cartCountSpan.classList.remove('pulse');
+        // Restart pulse animation
+        void cartCountSpan.offsetWidth;
+        cartCountSpan.classList.add('pulse');
+      } else {
+        cartCountSpan.classList.remove('visible');
+      }
+    }
+
+    async function updateCartCountUI() {
+      try {
+        const res = await fetch('/api/cart', { credentials: 'include' });
+        if (!res.ok) throw new Error('Failed to load cart count');
+        const items = await res.json();
+        // Adapt if your API returns array or object:
+        const count = Array.isArray(items)
+          ? items.reduce((acc, item) => acc + item.quantity, 0)
+          : (items.count ?? (items.items ? items.items.reduce((acc, i) => acc + i.quantity, 0) : 0));
+        updateCartCount(count);
+      } catch (err) {
+        console.error('Error fetching cart count:', err);
+        updateCartCount(0);
+      }
+    }
+
+    window.addEventListener('storage', (event) => {
+      if (event.key === 'cartUpdated') {
+        updateCartCountUI();
+      }
+    });
+
+    // Call this function after cart changes to notify other tabs/windows
+    function notifyCartChanged() {
+      updateCartCountUI();
+      localStorage.setItem('cartUpdated', Date.now());
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      updateCartCountUI();
+    });
+  </script>
+</body>
+</html>

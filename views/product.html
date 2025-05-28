@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Product Details</title>
+  <style>
+    /* Reset & Base Styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #fdf9f9;
+      color: #333;
+      padding-bottom: 100px;
+      line-height: 1.6;
+    }
+
+    nav {
+      background: #fff;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .logo {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #ff6f91;
+    }
+
+    .links {
+      display: flex;
+      align-items: center;
+    }
+
+    .links a {
+      margin-left: 1.5rem;
+      font-weight: 500;
+      position: relative;
+      text-decoration: none;
+      color: #555;
+      transition: color 0.3s ease;
+      display: block;
+    }
+
+    .links a:hover {
+      color: #ff6f91;
+    }
+
+    .cart-icon {
+      font-size: 1.5rem;
+      color: #ff6f91;
+      margin-right: 1.5rem;
+      position: relative;
+      cursor: pointer;
+    }
+
+    .cart-icon:hover {
+      color: #e55d80;
+    }
+
+    .cart-count {
+      position: absolute;
+      top: -6px;
+      right: -10px;
+      background: #e55d80;
+      color: white;
+      border-radius: 50%;
+      padding: 2px 6px;
+      font-size: 0.75rem;
+      font-weight: bold;
+      pointer-events: none;
+      user-select: none;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .cart-count.visible {
+      opacity: 1;
+    }
+
+    /* Pulse animation for cart count */
+    @keyframes pulse {
+      0% {
+        transform: scale(1);
+        opacity: 1;
+      }
+      50% {
+        transform: scale(1.4);
+        opacity: 0.8;
+      }
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+    .pulse {
+      animation: pulse 0.6s ease forwards;
+    }
+
+    main.container {
+      max-width: 700px;
+      width: 100%;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      padding: 2rem;
+      margin: 60px auto 80px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      transition: transform 0.3s ease;
+      position: relative;
+      overflow: visible;
+    }
+
+    main.container:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      color: #e05581;
+      font-weight: 700;
+      margin-bottom: 2rem;
+      letter-spacing: 1.1px;
+      text-transform: uppercase;
+    }
+
+    img {
+      width: 100%;
+      max-width: 340px;
+      height: 220px;
+      object-fit: contain;
+      border-radius: 0 0 10px 10px;
+      margin-bottom: 1rem;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      cursor: zoom-in;
+      background: white;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      position: relative;
+      z-index: 1;
+    }
+
+    img:hover {
+      transform: scale(1.04);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+    }
+
+    .price {
+      color: #28a745;
+      font-weight: bold;
+      font-size: 1.5rem;
+      margin-bottom: 1.5rem;
+      text-shadow: 0 2px 4px rgba(40, 167, 69, 0.3);
+    }
+
+    .description {
+      background: #fff0f6;
+      color: #444;
+      font-size: 1.125rem;
+      font-weight: 500;
+      line-height: 1.8;
+      padding: 1rem 1.5rem;
+      border-radius: 8px;
+      margin-bottom: 2rem;
+      box-shadow: 0 4px 20px rgba(214, 51, 108, 0.08);
+      width: 100%;
+      max-width: 90%;
+      white-space: pre-wrap;
+    }
+
+    .cart-buttons {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      position: relative;
+      z-index: 10;
+    }
+
+    .add-to-cart-btn {
+      background: #ff6f91;
+      border: none;
+      color: white;
+      font-weight: 600;
+      font-size: 1.1rem;
+      border-radius: 8px;
+      padding: 0.75rem 1.5rem;
+      cursor: pointer;
+      box-shadow: 0 4px 8px rgba(255, 111, 145, 0.4);
+      transition: background 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
+    }
+
+    .add-to-cart-btn:hover {
+      background: #e55d80;
+      box-shadow: 0 6px 12px rgba(229, 93, 128, 0.6);
+      transform: translateY(-3px) scale(1.05);
+    }
+
+    .error-message {
+      color: #d6336c;
+      font-weight: 700;
+      font-size: 1.2rem;
+      padding: 1rem;
+      background: #ffd6e7;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(214, 51, 108, 0.2);
+      max-width: 420px;
+      margin: 2rem auto 0;
+      text-align: center;
+    }
+    /* HIDE error box when empty */
+    .error-message:empty {
+      display: none;
+    }
+
+    /* Style for flying cloned image */
+    .flying-image {
+      position: fixed;
+      pointer-events: none;
+      z-index: 9999;
+      border-radius: 10px;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+      transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.8s ease;
+      will-change: transform, opacity;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav id="navbar">
+    <div class="logo">🧸 Plushie Store</div>
+    <div class="links">
+      <a href="/cart" class="cart-icon" aria-label="View Cart" title="View Cart" id="cart-icon">
+        🛒 <span id="cart-count" class="cart-count">0</span>
+      </a>
+      <a href="/">Home</a>
+      <a href="/products">Products</a>
+      <a href="/faq">FAQ</a>
+      <a href="/about">About Us</a>
+      <a href="/login">Login/Register</a>
+    </div>
+  </nav>
+
+  <!-- Product Details -->
+  <main class="container" role="main">
+    <h1 id="product-name">Loading product...</h1>
+    <img id="product-image" src="" alt="" style="display:none" />
+    <p class="price" id="product-price"></p>
+    <p class="description" id="product-description"></p>
+
+    <div class="cart-buttons">
+      <button id="add-to-cart" class="add-to-cart-btn" style="display:none;">Add to Cart</button>
+    </div>
+
+    <div id="error-message" class="error-message"></div>
+  </main>
+
+  <script>
+    const cartCountSpan = document.getElementById('cart-count');
+    const cartIcon = document.getElementById('cart-icon');
+    const errorMessage = document.getElementById('error-message');
+    let currentProduct = null;
+
+    function updateCartCount(count) {
+      cartCountSpan.textContent = count;
+      if (count > 0) {
+        cartCountSpan.classList.add('visible');
+
+        cartCountSpan.classList.remove('pulse');
+        void cartCountSpan.offsetWidth; // trigger reflow
+        cartCountSpan.classList.add('pulse');
+      } else {
+        cartCountSpan.classList.remove('visible');
+      }
+    }
+
+    function escapeHTML(str) {
+      const p = document.createElement('p');
+      p.textContent = str;
+      return p.innerHTML;
+    }
+
+    async function fetchCartCount() {
+      try {
+        const res = await fetch('/api/cart', { credentials: 'include' });
+        if (!res.ok) throw new Error('Failed to fetch cart');
+        const cartData = await res.json();
+        return cartData.reduce((sum, item) => sum + (item.quantity || 0), 0);
+      } catch (err) {
+        console.error('Error fetching cart count:', err);
+        return 0;
+      }
+    }
+
+    async function loadProduct() {
+      const params = new URLSearchParams(window.location.search);
+      const idRaw = params.get('id') || '';
+      // Extract only the numeric ID before any dash or slash
+      const id = idRaw.split(/[-\/]/)[0];
+      if (!id) {
+        errorMessage.textContent = 'No product ID provided.';
+        return;
+      }
+
+      try {
+        const res = await fetch(`/api/products/${id}`);
+        if (!res.ok) throw new Error('Product not found or failed to load.');
+        const product = await res.json();
+        currentProduct = product;
+
+        document.getElementById('product-name').textContent = product.name;
+
+        const img = document.getElementById('product-image');
+        img.src = product.image;
+        img.alt = product.name;
+        img.style.display = 'block';
+
+        document.getElementById('product-price').textContent = `$${product.price.toFixed(2)}`;
+        // Replace newlines with <br> for description display
+        document.getElementById('product-description').innerHTML = escapeHTML(product.description).replace(/\n/g, '<br>');
+
+        document.getElementById('add-to-cart').style.display = 'inline-block';
+        errorMessage.textContent = '';
+
+        // *** Added code here to update URL with slug ***
+        const slug = product.name.toLowerCase()
+          .replace(/[^a-z0-9]+/g, '-')
+          .replace(/^-+|-+$/g, '');
+        const newUrl = `${window.location.pathname}?id=${product.id}-${slug}`;
+        window.history.replaceState(null, '', newUrl);
+
+      } catch (error) {
+        errorMessage.textContent = error.message;
+      }
+    }
+
+    function flyToCartAnimation() {
+      return new Promise((resolve) => {
+        const productImage = document.getElementById('product-image');
+        const imgRect = productImage.getBoundingClientRect();
+        const cartRect = cartIcon.getBoundingClientRect();
+
+        const flyingImg = productImage.cloneNode(true);
+        flyingImg.style.position = 'fixed';
+        flyingImg.style.left = `${imgRect.left}px`;
+        flyingImg.style.top = `${imgRect.top}px`;
+        flyingImg.style.width = `${imgRect.width}px`;
+        flyingImg.style.height = `${imgRect.height}px`;
+        flyingImg.style.transition = 'transform 0.8s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.8s ease';
+        flyingImg.classList.add('flying-image');
+
+        document.body.appendChild(flyingImg);
+
+        const translateX = cartRect.left + cartRect.width / 2 - (imgRect.left + imgRect.width / 2);
+        const translateY = cartRect.top + cartRect.height / 2 - (imgRect.top + imgRect.height / 2);
+
+        // Force reflow for transition to apply
+        flyingImg.getBoundingClientRect();
+
+        flyingImg.style.transform = `translate(${translateX}px, ${translateY}px) scale(0.2)`;
+        flyingImg.style.opacity = '0.5';
+
+        flyingImg.addEventListener('transitionend', () => {
+          flyingImg.remove();
+          resolve();
+        }, { once: true });
+      });
+    }
+
+    async function addToCart() {
+      if (!currentProduct) return;
+
+      try {
+        await flyToCartAnimation();
+
+        const res = await fetch('/api/cart/add', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify({ productId: currentProduct.id, quantity: 1 }),
+        });
+
+        const data = await res.json();
+
+        if (res.ok && data.success) {
+          alert(`${currentProduct.name} added to cart!`);
+
+          const count = await fetchCartCount();
+          updateCartCount(count);
+
+          setTimeout(() => {
+            window.location.href = '/cart';
+          }, 2000);
+        } else {
+          alert(data.error || 'Failed to add to cart.');
+        }
+      } catch (err) {
+        alert('Network error while adding to cart.');
+        console.error(err);
+      }
+    }
+
+    document.getElementById('add-to-cart').addEventListener('click', (e) => {
+      e.preventDefault();
+      addToCart();
+    });
+
+    window.addEventListener('DOMContentLoaded', async () => {
+      await loadProduct();
+      const count = await fetchCartCount();
+      updateCartCount(count);
+    });
+  </script>
+</body>
+</html>
