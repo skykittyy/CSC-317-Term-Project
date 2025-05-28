@@ -28,8 +28,6 @@
 ### Installation
 
 ```bash
-git clone https://github.com/yourusername/plushie-paradise.git
-cd plushie-paradise
 npm install
 npm start
 node index.js
