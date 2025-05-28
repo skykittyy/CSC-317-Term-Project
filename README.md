@@ -3,7 +3,7 @@
 ## ✨ Features
 
 -  Browse a wide collection of plush toys
--  Search and filter by category, size, and price
+-  Search up products on the search bar
 -  Make an account by registering
 -  Add/Remove items to cart and go to checkout
 -  Navigation Bar on the top with important info like FAQ
