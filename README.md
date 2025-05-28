@@ -26,8 +26,7 @@
 - Git
 
 ### Installation
+1. Install from here.
 
 ```bash
-npm install
-npm start
-node index.js
+node app.js
