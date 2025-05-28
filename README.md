@@ -26,7 +26,7 @@
 - Git
 
 ### Installation
-1. Install from here.
+1. Install the zip file.
 
 ```bash
 node app.js
