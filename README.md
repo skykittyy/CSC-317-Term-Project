@@ -1,1 +1,35 @@
-# CSC-317-Term-Project
+# 🧸 Plushie Paradise (CSC317 Term Project) By Group 13
+
+## ✨ Features
+
+-  Browse a wide collection of plush toys
+-  Search and filter by category, size, and price
+-  Make an account by registering
+-  Add/Remove items to cart and go to checkout
+-  Navigation Bar on the top with important info like FAQ
+
+## 🛠️ Tech Details
+
+- **Frontend**: HTML, CSS, JavaScript
+- **Backend**: Node.js, Express.js
+- **Database**: SQLite3
+- **Authentication**: SQLite3 Database
+- **Deployment**: Glitch
+
+---
+
+## 🚀 Getting Started on Website Deployment
+
+### Prerequisites
+
+- Node.js & npm
+- Git
+
+### Installation
+
+```bash
+git clone https://github.com/yourusername/plushie-paradise.git
+cd plushie-paradise
+npm install
+npm start
+node index.js
